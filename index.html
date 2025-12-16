@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Yeni Yıl Sürprizi 🎄</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #0b1d3a, #000);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    /* ZARF */
+    .envelope {
+      width: 220px;
+      height: 140px;
+      background: #c0392b;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.6s ease;
+    }
+
+    .envelope:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 110px solid transparent;
+      border-right: 110px solid transparent;
+      border-top: 70px solid #e74c3c;
+    }
+
+    .click-text {
+      position: absolute;
+      bottom: -35px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* SAHNE */
+    .scene {
+      display: none;
+      text-align: center;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .tree {
+      font-size: 120px;
+      animation: glow 2s infinite alternate;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .message span {
+      display: block;
+      font-size: 22px;
+      margin-top: 10px;
+      color: #ffd700;
+    }
+
+    .decor {
+      font-size: 30px;
+      margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #0f0; }
+      to { text-shadow: 0 0 25px #7CFF7C; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="envelope" onclick="openEnvelope()">
+    <div class="click-text">Zarfa tıkla ✉️</div>
+  </div>
+
+    <div class="scene" id="scene">
+    <div class="tree">🎄</div>
+    <div class="decor">✨ 🎁 ⭐ ❄️</div>
+        <div class="message">
+      Mutlu Yıllar 🎉
+      <span>İyi ki varsın 🤍</span>
+    </div>
+  </div>
+    <div class="decor">✨ 🎁 ⭐ ❄️</div>
+    <div class="message">
+      Mutlu Yıllar 🎉
+      <span>İyi ki varsın 💙</span>
+    </div>
+  </div>
+
+    <script>
+    const music = new Audio('https://cdn.pixabay.com/download/audio/2022/12/22/audio_8c9c6c7c2c.mp3?filename=christmas-piano-ambient-124008.mp3');
+    music.loop = true;
+    music.volume = 0.3;
+
+    function openEnvelope() {
+      document.querySelector('.envelope').style.display = 'none';
+      document.getElementById('scene').style.display = 'block';
+      music.play();
+      startSnow();
+    }
+
+    const snowflakes = [];
+    const snowCanvas = document.createElement('canvas');
+    snowCanvas.id = 'snow';
+    document.body.appendChild(snowCanvas);
+    const sctx = snowCanvas.getContext('2d');
+
+    function resizeSnow() {
+      snowCanvas.width = window.innerWidth;
+      snowCanvas.height = window.innerHeight;
+    }
+    resizeSnow();
+
+    function Snowflake() {
+      this.x = Math.random() * snowCanvas.width;
+      this.y = Math.random() * snowCanvas.height;
+      this.radius = Math.random() * 2 + 1;
+      this.speed = Math.random() * 0.5 + 0.3;
+    }
+
+    function startSnow() {
+      for (let i = 0; i < 120; i++) snowflakes.push(new Snowflake());
+      animateSnow();
+    }
+
+    function animateSnow() {
+      sctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+      sctx.fillStyle = 'rgba(255,255,255,0.8)';
+      snowflakes.forEach(flake => {
+        sctx.beginPath();
+        sctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        sctx.fill();
+        flake.y += flake.speed;
+        if (flake.y > snowCanvas.height) flake.y = 0;
+      });
+      requestAnimationFrame(animateSnow);
+    }
+
+    window.addEventListener('resize', resizeSnow);
+  </script>
+  </script>
+
+  <canvas id="fireworks"></canvas>
+  <script>
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const fireworks = [];
+
+    function Firework(x, y) {
+      this.x = x;
+      this.y = y;
+      this.radius = 1;
+      this.alpha = 1;
+      this.colors = ['#ff004c', '#ffd700', '#00e5ff', '#7CFF7C'];
+      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+    }
+
+    Firework.prototype.draw = function () {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.restore();
+    };
+
+    Firework.prototype.update = function () {
+      this.radius += 2;
+      this.alpha -= 0.03;
+    };
+
+    function animateFireworks() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        fireworks[i].update();
+        fireworks[i].draw();
+        if (fireworks[i].alpha <= 0) fireworks.splice(i, 1);
+      }
+      requestAnimationFrame(animateFireworks);
+    }
+
+    setInterval(() => {
+      fireworks.push(new Firework(Math.random() * canvas.width, Math.random() * canvas.height / 2));
+    }, 500);
+
+    animateFireworks();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
